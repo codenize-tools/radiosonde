@@ -30,7 +30,7 @@ class Radiosonde::DSL::Alarm
 
   def description(value)
     _call_once(:description)
-    @result[:alarm_description] = nil_or_str(value)
+    @result[:description] = nil_or_str(value)
   end
 
   def namespace(value)
