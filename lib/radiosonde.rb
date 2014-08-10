@@ -1,5 +1,6 @@
-require 'radiosonde/version'
+module Radiosonde; end
 
-module Radiosonde
-  # Your code goes here...
-end
+require 'aws-sdk'
+
+require 'radiosonde/version'
+require 'radiosonde/exporter'
