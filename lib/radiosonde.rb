@@ -1,4 +1,4 @@
-require "radiosonde/version"
+require 'radiosonde/version'
 
 module Radiosonde
   # Your code goes here...
