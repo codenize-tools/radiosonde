@@ -12,9 +12,9 @@ file = DEFAULT_FILENAME
 output_file = '-'
 
 options = {
-  :dry_run     => false,
-  :color       => true,
-  :debug       => false,
+  :dry_run => false,
+  :color   => true,
+  :debug   => false,
 }
 
 ARGV.options do |opt|
