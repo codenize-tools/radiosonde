@@ -17,6 +17,32 @@ class Radiosonde::Client
     Radiosonde::DSL.convert(exported, @options.merge(opts))
   end
 
+  def metrics(opts = {})
+    namespaces = {}
+
+    AWS.memoize do
+      ms = @cloud_watch.metrics
+
+      [:namespace, :metric_name].each do |name|
+        if (value = opts[name])
+          ms = ms.filter(name.to_s, value)
+        end
+      end
+
+      ms.sort_by {|m| [m.namespace, m.metric_name] }.each do |m|
+        if opts[:with_dimensions]
+          namespaces[m.namespace] ||= {}
+          namespaces[m.namespace][m.metric_name] = m.dimensions
+        else
+          namespaces[m.namespace] ||= []
+          namespaces[m.namespace] << m.metric_name
+        end
+      end
+    end
+
+    return namespaces
+  end
+
   def apply(file)
     AWS.memoize { walk(file) }
   end

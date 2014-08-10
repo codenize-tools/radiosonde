@@ -17,6 +17,8 @@ options = {
   :debug   => false,
 }
 
+show_opts = {}
+
 ARGV.options do |opt|
   begin
     access_key = nil
@@ -24,17 +26,21 @@ ARGV.options do |opt|
     region = nil
     profile_name = nil
 
-    opt.on('-p', '--profile PROFILE_NAME')  {|v| profile_name      = v       }
-    opt.on('-k', '--access-key ACCESS_KEY') {|v| access_key        = v       }
-    opt.on('-s', '--secret-key SECRET_KEY') {|v| secret_key        = v       }
-    opt.on('-r', '--region REGION')         {|v| region            = v       }
-    opt.on('-a', '--apply')                 {    mode              = :apply  }
-    opt.on('-f', '--file FILE')             {|v| file              = v       }
-    opt.on('',   '--dry-run')               {    options[:dry_run] = true    }
-    opt.on('-e', '--export')                {    mode              = :export }
-    opt.on('-o', '--output FILE')           {|v| output_file       = v       }
-    opt.on(''  , '--no-color')              {    options[:color]   = false   }
-    opt.on(''  , '--debug')                 {    options[:debug]   = true    }
+    opt.on('-p', '--profile PROFILE_NAME')  {|v| profile_name            = v                }
+    opt.on('-k', '--access-key ACCESS_KEY') {|v| access_key              = v                }
+    opt.on('-s', '--secret-key SECRET_KEY') {|v| secret_key              = v                }
+    opt.on('-r', '--region REGION')         {|v| region                  = v                }
+    opt.on('-a', '--apply')                 {    mode                    = :apply           }
+    opt.on('-f', '--file FILE')             {|v| file                    = v                }
+    opt.on('',   '--dry-run')               {    options[:dry_run]       = true             }
+    opt.on('-e', '--export')                {    mode                    = :export          }
+    opt.on('-o', '--output FILE')           {|v| output_file             = v                }
+    opt.on('',   '--show-metrics')          {    mode                    = :show_metrics    }
+    opt.on('',   '--show-dimensions')       {    mode                    = :show_dimensions }
+    opt.on('',   '--namespace NAMESPACE')   {|v| show_opts[:namespace]   = v                }
+    opt.on('',   '--metric-name NAME')      {|v| show_opts[:metric_name] = v                }
+    opt.on(''  , '--no-color')              {    options[:color]         = false            }
+    opt.on(''  , '--debug')                 {    options[:debug]         = true             }
     opt.parse!
 
     aws_opts = {}
@@ -97,6 +103,10 @@ begin
     updated = client.apply(file)
 
     logger.info('No change'.intense_blue) unless updated
+  when :show_metrics
+    puts JSON.pretty_generate(client.metrics(show_opts))
+  when :show_dimensions
+    puts JSON.pretty_generate(client.metrics(show_opts.merge(:with_dimensions => true)))
   else
     raise 'must not happen'
   end
