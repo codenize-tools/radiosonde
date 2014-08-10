@@ -1,7 +1,14 @@
 module Radiosonde; end
 
-require 'aws-sdk'
+require 'json'
+require 'logger'
+require 'singleton'
 
+require 'aws-sdk'
+require 'term/ansicolor'
+
+require 'radiosonde/logger'
+require 'radiosonde/client'
 require 'radiosonde/dsl'
 require 'radiosonde/dsl/validator'
 require 'radiosonde/dsl/alarm'
@@ -10,4 +17,5 @@ require 'radiosonde/dsl/converter'
 require 'radiosonde/dsl/parser'
 require 'radiosonde/dsl/statistic'
 require 'radiosonde/exporter'
+require 'radiosonde/ext/string_ext'
 require 'radiosonde/version'
