@@ -11,6 +11,10 @@ class Radiosonde::Logger < ::Logger
     self.level = Logger::INFO
   end
 
+  def set_debug(value)
+    self.level = value ? Logger::DEBUG : Logger::INFO
+  end
+
   module Helper
     def log(level, message, color, log_id = nil)
       message = "[#{level.to_s.upcase}] #{message}" unless level == :info

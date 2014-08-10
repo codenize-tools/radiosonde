@@ -1,0 +1,110 @@
+#!/usr/bin/env ruby
+$: << File.expand_path("#{File.dirname __FILE__}/../lib")
+require 'rubygems'
+require 'radiosonde'
+require 'optparse'
+
+Version = Radiosonde::VERSION
+DEFAULT_FILENAME = 'Alarmfile'
+
+mode = nil
+file = DEFAULT_FILENAME
+output_file = '-'
+
+options = {
+  :dry_run     => false,
+  :color       => true,
+  :debug       => false,
+}
+
+ARGV.options do |opt|
+  begin
+    access_key = nil
+    secret_key = nil
+    region = nil
+    profile_name = nil
+
+    opt.on('-p', '--profile PROFILE_NAME')  {|v| profile_name      = v       }
+    opt.on('-k', '--access-key ACCESS_KEY') {|v| access_key        = v       }
+    opt.on('-s', '--secret-key SECRET_KEY') {|v| secret_key        = v       }
+    opt.on('-r', '--region REGION')         {|v| region            = v       }
+    opt.on('-a', '--apply')                 {    mode              = :apply  }
+    opt.on('-f', '--file FILE')             {|v| file              = v       }
+    opt.on('',   '--dry-run')               {    options[:dry_run] = true    }
+    opt.on('-e', '--export')                {    mode              = :export }
+    opt.on('-o', '--output FILE')           {|v| output_file       = v       }
+    opt.on(''  , '--no-color')              {    options[:color]   = false   }
+    opt.on(''  , '--debug')                 {    options[:debug]   = true    }
+    opt.parse!
+
+    aws_opts = {}
+
+    if access_key and secret_key
+      aws_opts = {
+        :access_key_id     => access_key,
+        :secret_access_key => secret_key,
+      }
+    elsif profile_name
+      provider = AWS::Core::CredentialProviders::SharedCredentialFileProvider.new(
+        :profile_name => profile_name
+      )
+      aws_opts[:credential_provider] = provider
+    elsif (access_key and !secret_key) or (!access_key and secret_key) or mode.nil?
+      puts opt.help
+      exit 1
+    end
+
+    aws_opts[:region] = region if region
+    AWS.config(aws_opts)
+  rescue => e
+    $stderr.puts("[ERROR] #{e.message}")
+    exit 1
+  end
+end
+
+String.colorize = options[:color]
+
+if options[:debug]
+  AWS.config({
+    :http_wire_trace => true,
+    :logger => Radiosonde::Logger.instance,
+  })
+end
+
+begin
+  logger = Radiosonde::Logger.instance
+  logger.set_debug(options[:debug])
+  client = Radiosonde::Client.new(options)
+
+  case mode
+  when :export
+    if output_file == '-'
+      logger.info('# Export Alarm')
+      puts client.export(options)
+    else
+      logger.info("Export Alarm to `#{output_file}`")
+      open(output_file, 'wb') {|f| f.puts client.export(options) }
+    end
+  when :apply
+    unless File.exist?(file)
+      raise "No Alarmfile found (looking for: #{file})"
+    end
+
+    msg = "Apply `#{file}` to CloudWatch"
+    msg << ' (dry-run)' if options[:dry_run]
+    logger.info(msg)
+
+    updated = client.apply(file)
+
+    logger.info('No change'.intense_blue) unless updated
+  else
+    raise 'must not happen'
+  end
+rescue => e
+  if options[:debug]
+    raise e
+  else
+    $stderr.puts("[ERROR] #{e.message}".red)
+    exit 1
+  end
+end
