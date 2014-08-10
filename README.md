@@ -51,6 +51,7 @@ Usage: radiosonde [options]
         --start-time TIME
         --end-time TIME
         --statistic STATISTIC
+        --no-color
         --debug
 ```
 
