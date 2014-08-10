@@ -20,12 +20,13 @@ class Radiosonde::DSL::Converter
 
   def output_alarm(name, attrs)
     name = name.inspect
-    description = attrs[:description].inspect
+    description = attrs[:description]
+    description = "description #{description.inspect}\n  " if description
     namespace = attrs[:namespace].inspect
     metric_name = attrs[:metric_name].inspect
     dimensions = format_dimensions(attrs)
     period = attrs[:period].inspect
-    statistic =  Radiosonde::DSL::Statistic.normalize(attrs[:statistic]).inspect
+    statistic = Radiosonde::DSL::Statistic.conv_to_alias(attrs[:statistic]).inspect
     threshold = format_threshold(attrs)
     actions_enabled = attrs[:actions_enabled].inspect
     alarm_actions = attrs[:alarm_actions].inspect
@@ -34,8 +35,8 @@ class Radiosonde::DSL::Converter
 
     <<-EOS
 alarm #{name} do
-  description #{description}
-  namespace #{namespace}
+  #{description
+  }namespace #{namespace}
   metric_name #{metric_name}
   dimensions #{dimensions}
   period #{period}
@@ -71,7 +72,7 @@ end
   def format_threshold(attrs)
     threshold = attrs[:threshold]
     operator = attrs[:comparison_operator]
-    operator = Radiosonde::DSL::ComparisonOperator.normalize(operator)
+    operator = Radiosonde::DSL::ComparisonOperator.conv_to_alias(operator)
 
     [
       operator.inspect,
