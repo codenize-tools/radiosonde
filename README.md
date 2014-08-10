@@ -43,6 +43,10 @@ Usage: radiosonde [options]
         --dry-run
     -e, --export
     -o, --output FILE
+        --show-metrics
+        --show-dimensions
+        --namespace NAMESPACE
+        --metric-name NAME
         --no-color
         --debug
 ```
