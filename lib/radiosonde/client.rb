@@ -30,7 +30,18 @@ class Radiosonde::Client
       end
 
       ms.sort_by {|m| [m.namespace, m.metric_name] }.each do |m|
-        if opts[:with_dimensions]
+        if opts[:with_statistics]
+          namespaces[m.namespace] ||= {}
+          statistics_ops = {}
+          [:start_time, :end_time, :statistics].each do |name|
+            statistics_ops[name] = opts[name] if opts[name]
+          end
+          statistics = m.statistics(statistics_ops)
+          namespaces[m.namespace][m.metric_name] = {
+            :label => statistics.label,
+            :datapoints => statistics.datapoints
+          }
+        elsif opts[:with_dimensions]
           namespaces[m.namespace] ||= {}
           namespaces[m.namespace][m.metric_name] = m.dimensions
         else

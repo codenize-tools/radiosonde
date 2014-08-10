@@ -3,6 +3,8 @@ $: << File.expand_path("#{File.dirname __FILE__}/../lib")
 require 'rubygems'
 require 'radiosonde'
 require 'optparse'
+require 'optparse/time'
+require 'time'
 
 Version = Radiosonde::VERSION
 DEFAULT_FILENAME = 'Alarmfile'
@@ -17,7 +19,11 @@ options = {
   :debug   => false,
 }
 
-show_opts = {}
+show_opts = {
+  :start_time => Time.now - 3600,
+  :end_time   => Time.now,
+  :statistic => :average,
+}
 
 ARGV.options do |opt|
   begin
@@ -37,9 +43,15 @@ ARGV.options do |opt|
     opt.on('-o', '--output FILE')           {|v| output_file             = v                }
     opt.on('',   '--show-metrics')          {    mode                    = :show_metrics    }
     opt.on('',   '--show-dimensions')       {    mode                    = :show_dimensions }
+    opt.on('',   '--show-statistics')       {    mode                    = :show_statistics }
     opt.on('',   '--namespace NAMESPACE')   {|v| show_opts[:namespace]   = v                }
     opt.on('',   '--metric-name NAME')      {|v| show_opts[:metric_name] = v                }
-    opt.on(''  , '--no-color')              {    options[:color]         = false            }
+    opt.on('',   '--start-time TIME', Time) {|v| show_opts[:start_time]  = v                }
+    opt.on('',   '--end-time TIME', Time)   {|v| show_opts[:end_time]    = v                }
+    opt.on('',   '--end-time TIME', Time)   {|v| show_opts[:end_time]    = v                }
+    opt.on(''  , '--statistic STATISTIC', Radiosonde::DSL::Statistic::ALIASES.values) {|v|
+      show_opts[:statistic]
+    }
     opt.on(''  , '--debug')                 {    options[:debug]         = true             }
     opt.parse!
 
@@ -107,6 +119,9 @@ begin
     puts JSON.pretty_generate(client.metrics(show_opts))
   when :show_dimensions
     puts JSON.pretty_generate(client.metrics(show_opts.merge(:with_dimensions => true)))
+  when :show_statistics
+    show_opts[:statistics] = [Radiosonde::DSL::Statistic.normalize(show_opts[:statistic])]
+    puts JSON.pretty_generate(client.metrics(show_opts.merge(:with_statistics => true)))
   else
     raise 'must not happen'
   end
