@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = Radiosonde::VERSION
   spec.authors       = ['Genki Sugawara']
   spec.email         = ['sgwr_dts@yahoo.co.jp']
-  spec.description   = "Kelbim is a tool to manage CloudWatch Alarm. It defines the state of CloudWatch Alarm using DSL, and updates CloudWatch Alarm according to DSL."
-  spec.summary       = "Kelbim is a tool to manage CloudWatch Alarm."
+  spec.description   = "Radiosonde is a tool to manage CloudWatch Alarm. It defines the state of CloudWatch Alarm using DSL, and updates CloudWatch Alarm according to DSL."
+  spec.summary       = "Radiosonde is a tool to manage CloudWatch Alarm."
   spec.homepage      = ''
   spec.license       = 'MIT'
 

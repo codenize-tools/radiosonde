@@ -1,6 +1,8 @@
 # Radiosonde
 
-TODO: Write a gem description
+Radiosonde is a tool to manage CloudWatch Alarm.
+
+It defines the state of CloudWatch Alarm using DSL, and updates CloudWatch Alarm according to DSL.
 
 ## Installation
 
@@ -18,12 +20,53 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+```sh
+export AWS_ACCESS_KEY_ID='...'
+export AWS_SECRET_ACCESS_KEY='...'
+export AWS_REGION='us-east-1'
+radiosonde -e -o Alarmfile  # export CloudWatch Alarm
+vi Alarmfile
+radiosonde -a --dry-run
+radiosonde -a               # apply `Alarmfile` to CloudWatch
+```
 
-## Contributing
+## Help
 
-1. Fork it ( http://github.com/<my-github-username>/radiosonde/fork )
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create new Pull Request
+```
+Usage: radiosonde [options]
+    -p, --profile PROFILE_NAME
+    -k, --access-key ACCESS_KEY
+    -s, --secret-key SECRET_KEY
+    -r, --region REGION
+    -a, --apply
+    -f, --file FILE
+        --dry-run
+    -e, --export
+    -o, --output FILE
+        --no-color
+        --debug
+```
+
+## Alarmfile example
+
+```ruby
+require 'other/alarmfile'
+
+alarm "alarm1" do
+  namespace "AWS/EC2"
+  metric_name "CPUUtilization"
+  dimensions "InstanceId"=>"i-XXXXXXXX"
+  period 300
+  statistic :average
+  threshold ">=", 50.0
+  evaluation_periods 1
+  actions_enabled true
+  alarm_actions []
+  ok_actions []
+  insufficient_data_actions ["arn:aws:sns:us-east-1:123456789012:my_topic"]
+end
+
+alarm "alarm2" do
+  ...
+end
+```
