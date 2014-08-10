@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ['sgwr_dts@yahoo.co.jp']
   spec.description   = "Radiosonde is a tool to manage CloudWatch Alarm. It defines the state of CloudWatch Alarm using DSL, and updates CloudWatch Alarm according to DSL."
   spec.summary       = "Radiosonde is a tool to manage CloudWatch Alarm."
-  spec.homepage      = ''
+  spec.homepage      = 'https://github.com/winebarrel/radiosonde'
   spec.license       = 'MIT'
 
   spec.files         = `git ls-files -z`.split("\x0")

@@ -4,6 +4,8 @@ Radiosonde is a tool to manage CloudWatch Alarm.
 
 It defines the state of CloudWatch Alarm using DSL, and updates CloudWatch Alarm according to DSL.
 
+[![Gem Version](https://badge.fury.io/rb/radiosonde.svg)](http://badge.fury.io/rb/radiosonde)
+
 ## Installation
 
 Add this line to your application's Gemfile:
