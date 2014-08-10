@@ -16,7 +16,7 @@ class Radiosonde::DSL::ComparisonOperator
     end
 
     def normalize(operator)
-      ALIASES.index(operator) || operator
+      (ALIASES.respond_to?(:key) ? ALIASES.key(operator) : ALIASES.index(operator)) || operator
     end
   end # of class methods
 end

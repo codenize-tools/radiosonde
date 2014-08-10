@@ -9,17 +9,11 @@ module Radiosonde::DSL::Validator
       when Array, Hash
         invalid = value.empty?
       end
-    else
+    elsif value.nil?
       invalid = true
     end
 
     raise _identify("`#{name}` is required") if invalid
-  end
-
-  def _not_defined(value, list)
-    if list.include?(value)
-      raise _identify("`#{value}` is already defined")
-    end
   end
 
   def _call_once(method_name)

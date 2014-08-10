@@ -13,7 +13,7 @@ class Radiosonde::Logger < ::Logger
 
   module Helper
     def log(level, message, color, log_id = nil)
-      message = "[#{level.to_s.upcase}] #{message}" unless self.level == :info
+      message = "[#{level.to_s.upcase}] #{message}" unless level == :info
       message << ": #{log_id}" if log_id
       message << ' (dry-run)' if @options && @options[:dry_run]
       logger = (@options && @options[:logger]) || Radiosonde::Logger.instance

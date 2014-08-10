@@ -17,7 +17,7 @@ class Radiosonde::DSL::Statistic
     end
 
     def normalize(statistic)
-      ALIASES.index(statistic) || statistic
+      (ALIASES.respond_to?(:key) ? ALIASES.key(statistic) : ALIASES.index(statistic)) || statistic
     end
   end # of class methods
 end

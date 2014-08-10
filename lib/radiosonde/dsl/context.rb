@@ -1,11 +1,11 @@
-class Radiosonde::DSL::Parser
+class Radiosonde::DSL::Context
   include Radiosonde::DSL::Validator
 
   class << self
-    def parse(dsl, path, opts = {})
+    def eval(dsl, path, opts = {})
       self.new(path, opts) {
         eval(dsl, binding, path)
-      }.result
+      }
     end
   end # of class methods
 
@@ -14,7 +14,8 @@ class Radiosonde::DSL::Parser
   def initialize(path, options = {}, &block)
     @path = path
     @options = options
-    @result = {}
+    @result = OpenStruct.new(:alarms => [])
+    @alarm_names = []
     instance_eval(&block)
   end
 
@@ -34,7 +35,11 @@ class Radiosonde::DSL::Parser
 
   def alarm(name, &block)
     _required(:alarm_name, name)
-    _not_defined(name, @result.keys)
-    @result[name] = Radiosonde::DSL::Alarm.new(name, &block).result
+    _validate("Alarm `#{name}` is already defined") do
+      not @alarm_names.include?(name)
+    end
+
+    @result.alarms << Radiosonde::DSL::Context::Alarm.new(name, &block).result
+    @alarm_names << name
   end
 end

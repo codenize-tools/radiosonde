@@ -5,7 +5,7 @@ class Radiosonde::DSL
     end
 
     def parse(dsl, path, opts = {})
-      Radiosonde::DSL::Parser.parse(dsl, path, opts)
+      Radiosonde::DSL::Context.eval(dsl, path, opts).result
     end
   end # of class methods
 end

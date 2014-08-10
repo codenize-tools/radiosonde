@@ -1,19 +1,19 @@
 class Radiosonde::Exporter
   class << self
-    def export(cw, opts = {})
-      self.new(cw, opts).export
+    def export(clowd_watch, opts = {})
+      self.new(clowd_watch, opts).export
     end
   end # of class methods
 
-  def initialize(cw, options = {})
-    @cw = cw
+  def initialize(clowd_watch, options = {})
+    @clowd_watch = clowd_watch
     @options = options
   end
 
   def export
     result = {}
 
-    @cw.alarms.each do |alarm|
+    @clowd_watch.alarms.each do |alarm|
       export_alarm(alarm, result)
     end
 
@@ -37,6 +37,7 @@ class Radiosonde::Exporter
       :alarm_actions => alarm.alarm_actions,
       :ok_actions => alarm.ok_actions,
       :insufficient_data_actions => alarm.insufficient_data_actions,
+      :unit => alarm.unit,
     }
 
     if @options[:with_status]
