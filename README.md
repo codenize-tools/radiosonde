@@ -45,9 +45,12 @@ Usage: radiosonde [options]
     -o, --output FILE
         --show-metrics
         --show-dimensions
+        --show-statistics
         --namespace NAMESPACE
         --metric-name NAME
-        --no-color
+        --start-time TIME
+        --end-time TIME
+        --statistic STATISTIC
         --debug
 ```
 

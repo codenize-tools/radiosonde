@@ -52,6 +52,7 @@ ARGV.options do |opt|
     opt.on(''  , '--statistic STATISTIC', Radiosonde::DSL::Statistic::ALIASES.values) {|v|
       show_opts[:statistic]
     }
+    opt.on(''  , '--no-color')              {    options[:color]         = false            }
     opt.on(''  , '--debug')                 {    options[:debug]         = true             }
     opt.parse!
 
