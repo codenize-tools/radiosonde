@@ -44,8 +44,8 @@ class Radiosonde::Wrapper::Alarm
     end
   end # of class methods
 
-  def initialize(clowd_watch, alarm, options = {})
-    @clowd_watch = clowd_watch
+  def initialize(cloud_watch, alarm, options = {})
+    @cloud_watch = cloud_watch
     @alarm = alarm
     @options = options
   end
@@ -61,7 +61,7 @@ class Radiosonde::Wrapper::Alarm
     unless @options[:dry_run]
       opts = self.class.normalize_attrs(dsl)
       @alarm.update(opts)
-      @clowd_watch.modify!
+      @cloud_watch.modify!
     end
   end
 
@@ -70,7 +70,7 @@ class Radiosonde::Wrapper::Alarm
 
     unless @options[:dry_run]
       @alarm.delete
-      @clowd_watch.modify!
+      @cloud_watch.modify!
     end
   end
 

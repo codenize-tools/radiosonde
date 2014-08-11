@@ -1,19 +1,19 @@
 class Radiosonde::Exporter
   class << self
-    def export(clowd_watch, opts = {})
-      self.new(clowd_watch, opts).export
+    def export(cloud_watch, opts = {})
+      self.new(cloud_watch, opts).export
     end
   end # of class methods
 
-  def initialize(clowd_watch, options = {})
-    @clowd_watch = clowd_watch
+  def initialize(cloud_watch, options = {})
+    @cloud_watch = cloud_watch
     @options = options
   end
 
   def export
     result = {}
 
-    @clowd_watch.alarms.each do |alarm|
+    @cloud_watch.alarms.each do |alarm|
       export_alarm(alarm, result)
     end
 

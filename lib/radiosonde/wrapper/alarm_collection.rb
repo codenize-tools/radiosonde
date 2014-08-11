@@ -1,15 +1,15 @@
 class Radiosonde::Wrapper::AlarmCollection
   include Radiosonde::Logger::Helper
 
-  def initialize(clowd_watch, alarms, options = {})
-    @clowd_watch = clowd_watch
+  def initialize(cloud_watch, alarms, options = {})
+    @cloud_watch = cloud_watch
     @alarms = alarms
     @options = options
   end
 
   def each
     @alarms.each do |alarm|
-      yield(Radiosonde::Wrapper::Alarm.new(@clowd_watch, alarm, @options))
+      yield(Radiosonde::Wrapper::Alarm.new(@cloud_watch, alarm, @options))
     end
   end
 
@@ -21,9 +21,9 @@ class Radiosonde::Wrapper::AlarmCollection
       alarm = OpenStruct.new(opts.merge(:alarm_name => name))
     else
       alarm = @alarms.create(name, opts)
-      @clowd_watch.modify!
+      @cloud_watch.modify!
     end
 
-    Radiosonde::Wrapper::Alarm.new(@clowd_watch, alarm, @options)
+    Radiosonde::Wrapper::Alarm.new(@cloud_watch, alarm, @options)
   end
 end
