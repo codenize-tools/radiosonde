@@ -93,7 +93,7 @@ class Radiosonde::Wrapper::Alarm
 
   def format_delta(delta)
     delta.map {|name, values|
-      "#{name}(#{values[:old]}=>#{values[:new]})"
+      "#{name}(#{values[:old].inspect}=>#{values[:new].inspect})"
     }.join(', ')
   end
 
