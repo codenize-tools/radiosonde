@@ -90,8 +90,6 @@ end
     ].join(', ')
   end
 
-  private
-
   def unbrace(str)
     str.sub(/\A\s*\{/, '').sub(/\}\s*\z/, '')
   end
