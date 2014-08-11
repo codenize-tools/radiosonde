@@ -56,7 +56,7 @@ class Radiosonde::Wrapper::Alarm
 
   def update(dsl)
     delta = diff(dsl)
-    log(:info, 'Update Alarm', :green, "#{self.alarm_name} > #{format_delta(delta)}")
+    log(:info, 'Update Alarm', :green, "#{self.alarm_name}: #{format_delta(delta)}")
 
     unless @options[:dry_run]
       opts = self.class.normalize_attrs(dsl)
