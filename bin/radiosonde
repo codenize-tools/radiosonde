@@ -59,10 +59,10 @@ ARGV.options do |opt|
     aws_opts = {}
 
     if access_key and secret_key
-      aws_opts = {
+      aws_opts.update(
         :access_key_id     => access_key,
-        :secret_access_key => secret_key,
-      }
+        :secret_access_key => secret_key
+      )
     elsif profile_name
       provider = AWS::Core::CredentialProviders::SharedCredentialFileProvider.new(
         :profile_name => profile_name
