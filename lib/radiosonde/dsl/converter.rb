@@ -90,23 +90,6 @@ end
     ].join(', ')
   end
 
-  def output_actions(attrs, opts = {})
-    prefix = opts[:prefix]
-    enabled = attrs[:actions_enabled].inspect
-    alarm_actions = attrs[:alarm_actions].inspect
-    ok_actions = attrs[:ok_actions].inspect
-    insufficient_data_actions = attrs[:insufficient_data_actions].inspect
-
-    [
-      'actions {',
-      "  :enabled => #{enabled},",
-      "  :alarm => #{alarm_actions},",
-      "  :ok => #{ok_actions},",
-      "  :insufficient => #{insufficient_data_actions},",
-      '}',
-    ].join("\n#{prefix}")
-  end
-
   private
 
   def unbrace(str)
