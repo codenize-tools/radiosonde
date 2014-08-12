@@ -99,7 +99,7 @@ class Radiosonde::Wrapper::Alarm
 
   def normalize(name, value)
     if [Array, Hash].any? {|c| value.kind_of?(c) }
-      value.sort
+      value.sort_by {|i| i.to_s }
     elsif DEFAULT_VALUES.has_key?(name) and value.nil?
       DEFAULT_VALUES[name]
     else
