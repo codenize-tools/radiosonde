@@ -84,10 +84,10 @@ end
 String.colorize = options[:color]
 
 if options[:debug]
-  Aws.config.update(
+  AWS.config({
     :http_wire_trace => true,
-    :logger => Radiosonde::Logger.instance
-  )
+    :logger => Radiosonde::Logger.instance,
+  })
 end
 
 begin
