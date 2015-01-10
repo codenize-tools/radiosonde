@@ -80,3 +80,6 @@ alarm "alarm2" do
   ...
 end
 ```
+
+## Similar tools
+* [Codenize.tools](http://codenize.tools/)
