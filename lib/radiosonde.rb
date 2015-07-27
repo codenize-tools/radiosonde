@@ -6,7 +6,7 @@ require 'logger'
 require 'ostruct'
 require 'singleton'
 
-require 'aws-sdk'
+require 'aws-sdk-v1'
 require 'term/ansicolor'
 
 require 'radiosonde/logger'
