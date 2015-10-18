@@ -81,5 +81,32 @@ alarm "alarm2" do
 end
 ```
 
+### Use template
+
+```ruby
+template "basic" do
+  namespace "AWS/EC2"
+  metric_name "CPUUtilization"
+  dimensions "InstanceId"=>"i-XXXXXXXX"
+  period 300
+  statistic :average
+  threshold ">=", 50.0
+  evaluation_periods 1
+  actions_enabled true
+  alarm_actions []
+  ok_actions []
+  insufficient_data_actions [context.sns_topic]
+end
+
+alarm "alarm1" do
+  include_template "basic", :sns_topic=>"arn:aws:sns:us-east-1:123456789012:my_topic"
+end
+
+alarm "alarm2" do
+  context.sns_topic = "arn:aws:sns:us-east-1:123456789012:my_topic2"
+  include_template "basic"
+end
+```
+
 ## Similar tools
 * [Codenize.tools](http://codenize.tools/)

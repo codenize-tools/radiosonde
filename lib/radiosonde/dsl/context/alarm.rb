@@ -1,8 +1,10 @@
 class Radiosonde::DSL::Context::Alarm
   include Radiosonde::DSL::Validator
+  include Radiosonde::TemplateHelper
 
-  def initialize(name, &block)
+  def initialize(context, name, &block)
     @error_identifier = "Alarm `#{name}`"
+    @context = context.merge(:alarm_name => name)
     @result = OpenStruct.new(
       :alarm_name => name,
       :alarm_actions => [],
