@@ -56,7 +56,10 @@ class Radiosonde::Wrapper::Alarm
 
   def update(dsl)
     delta = diff(dsl)
-    log(:info, 'Update Alarm', :green, "#{self.alarm_name}: #{format_delta(delta)}")
+    old_attrs = Hash[delta.map {|k, v| [k, v[:old]] }]
+    new_attrs = Hash[delta.map {|k, v| [k, v[:new]] }]
+    log(:info, 'Update Alarm', :green)
+    log(:info, "  #{self.alarm_name}:\n".green + Radiosonde::Utils.diff(old_attrs, new_attrs, :color => @options[:color], :indent => '    '), false)
 
     unless @options[:dry_run]
       opts = self.class.normalize_attrs(dsl)
@@ -89,12 +92,6 @@ class Radiosonde::Wrapper::Alarm
     end
 
     return delta
-  end
-
-  def format_delta(delta)
-    delta.map {|name, values|
-      "#{name}(#{values[:old].inspect} --> #{values[:new].inspect})"
-    }.join(', ')
   end
 
   def normalize(name, value)

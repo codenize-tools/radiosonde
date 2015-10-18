@@ -21,7 +21,8 @@ class Radiosonde::Logger < ::Logger
       message << ": #{log_id}" if log_id
       message << ' (dry-run)' if @options && @options[:dry_run]
       logger = (@options && @options[:logger]) || Radiosonde::Logger.instance
-      logger.send(level, message.send(color))
+      message = message.send(color) if color
+      logger.send(level, message)
     end
   end
 end

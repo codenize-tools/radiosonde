@@ -5,9 +5,11 @@ require 'json'
 require 'logger'
 require 'ostruct'
 require 'singleton'
+require 'pp'
 
 require 'aws-sdk-v1'
 require 'term/ansicolor'
+require 'diffy'
 
 require 'radiosonde/logger'
 require 'radiosonde/utils'
