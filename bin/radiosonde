@@ -9,6 +9,11 @@ require 'time'
 Version = Radiosonde::VERSION
 DEFAULT_FILENAME = 'Alarmfile'
 
+MAGIC_COMMENT = <<-EOS
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+EOS
+
 mode = nil
 file = DEFAULT_FILENAME
 output_file = '-'
@@ -52,6 +57,8 @@ ARGV.options do |opt|
     opt.on(''  , '--statistic STATISTIC', Radiosonde::DSL::Statistic::ALIASES.values) {|v|
       show_opts[:statistic]
     }
+    opt.on('',   '--include REGEXP')        {|v| options[:include]       = Regexp.new(v)    }
+    opt.on('',   '--exclude REGEXP')        {|v| options[:exclude]       = Regexp.new(v)    }
     opt.on(''  , '--no-color')              {    options[:color]         = false            }
     opt.on(''  , '--debug')                 {    options[:debug]         = true             }
     opt.parse!
@@ -102,7 +109,10 @@ begin
       puts client.export(options)
     else
       logger.info("Export Alarm to `#{output_file}`")
-      open(output_file, 'wb') {|f| f.puts client.export(options) }
+      open(output_file, 'wb') do |f|
+        f.puts MAGIC_COMMENT
+        f.puts client.export(options)
+      end
     end
   when :apply
     unless File.exist?(file)

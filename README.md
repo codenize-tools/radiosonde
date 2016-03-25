@@ -53,6 +53,8 @@ Usage: radiosonde [options]
         --start-time TIME
         --end-time TIME
         --statistic STATISTIC
+        --include REGEXP
+        --exclude REGEXP
         --no-color
         --debug
 ```

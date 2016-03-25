@@ -1,4 +1,6 @@
 class Radiosonde::Exporter
+  include Radiosonde::Utils
+
   class << self
     def export(cloud_watch, opts = {})
       self.new(cloud_watch, opts).export
@@ -14,7 +16,9 @@ class Radiosonde::Exporter
     result = {}
 
     @cloud_watch.alarms.each do |alarm|
-      export_alarm(alarm, result)
+      if matched?(alarm.alarm_name, @options[:include], @options[:exclude])
+        export_alarm(alarm, result)
+      end
     end
 
     return result

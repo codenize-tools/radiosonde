@@ -1,4 +1,18 @@
 module Radiosonde::Utils
+  def matched?(name, include_r, exclude_r)
+    result = true
+
+    if exclude_r
+      result &&= name !~ exclude_r
+    end
+
+    if include_r
+      result &&= name =~ include_r
+    end
+
+    result
+  end
+
   def collect_to_hash(collection, *key_attrs)
     opts = key_attrs.last.kind_of?(Hash) ? key_attrs.pop : {}
     hash = {}

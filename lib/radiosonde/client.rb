@@ -67,6 +67,7 @@ class Radiosonde::Client
     aws_alarms = collect_to_hash(aws.alarms, :alarm_name)
 
     dsl_alarms.each do |alarm_name, dsl_alarm|
+      next unless matched?(alarm_name, @options[:include], @options[:exclude])
       aws_alarm = aws_alarms.delete(alarm_name)
 
       if aws_alarm
@@ -77,6 +78,7 @@ class Radiosonde::Client
     end
 
     aws_alarms.each do |alarm_name, aws_alarm|
+      next unless matched?(alarm_name, @options[:include], @options[:exclude])
       aws_alarm.delete
     end
 

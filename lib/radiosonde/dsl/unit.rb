@@ -28,6 +28,7 @@ class Radiosonde::DSL::Unit
     'Count/Second'     => :count_per_second,
     'None'             => :none,
   }
+
   class << self
     def conv_to_alias(unit)
       ALIASES[unit] || unit
