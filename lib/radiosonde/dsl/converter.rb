@@ -1,3 +1,5 @@
+require 'radiosonde/dsl/unit'
+
 class Radiosonde::DSL::Converter
   class << self
     def convert(exported, opts = {})
@@ -37,7 +39,7 @@ class Radiosonde::DSL::Converter
 
     if unit = attrs[:unit]
       unit = Radiosonde::DSL::Unit.conv_to_alias(unit).inspect
-      unit = "unit #{unit}"
+      unit = "unit #{unit}\n"
     end
 
     <<-EOS
