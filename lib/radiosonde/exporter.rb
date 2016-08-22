@@ -15,9 +15,11 @@ class Radiosonde::Exporter
   def export
     result = {}
 
-    @cloud_watch.alarms.each do |alarm|
-      if matched?(alarm.alarm_name, @options[:include], @options[:exclude])
-        export_alarm(alarm, result)
+    @cloud_watch.describe_alarms.each do |page|
+      page.metric_alarms.each do |alarm|
+        if matched?(alarm.alarm_name, @options[:include], @options[:exclude])
+          export_alarm(alarm, result)
+        end
       end
     end
 

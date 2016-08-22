@@ -71,17 +71,17 @@ ARGV.options do |opt|
         :secret_access_key => secret_key
       )
     elsif profile_name
-      provider = AWS::Core::CredentialProviders::SharedCredentialFileProvider.new(
+      credentials = Aws::SharedCredentials.new(
         :profile_name => profile_name
       )
-      aws_opts[:credential_provider] = provider
+      aws_opts[:credentials] = credentials
     elsif (access_key and !secret_key) or (!access_key and secret_key) or mode.nil?
       puts opt.help
       exit 1
     end
 
     aws_opts[:region] = region if region
-    AWS.config(aws_opts)
+    Aws.config.update(aws_opts)
   rescue => e
     $stderr.puts("[ERROR] #{e.message}")
     exit 1
@@ -91,7 +91,7 @@ end
 String.colorize = options[:color]
 
 if options[:debug]
-  AWS.config({
+  Aws.config.update({
     :http_wire_trace => true,
     :logger => Radiosonde::Logger.instance,
   })

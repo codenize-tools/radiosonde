@@ -63,7 +63,7 @@ class Radiosonde::Wrapper::Alarm
 
     unless @options[:dry_run]
       opts = self.class.normalize_attrs(dsl)
-      @alarm.update(opts)
+      @cloud_watch.put_metric_alarm(opts.merge(alarm_name: alarm_name))
       @cloud_watch.modify!
     end
   end
@@ -72,7 +72,7 @@ class Radiosonde::Wrapper::Alarm
     log(:info, 'Delete Alarm', :red, self.alarm_name)
 
     unless @options[:dry_run]
-      @alarm.delete
+      @cloud_watch.delete_alarms(alarm_names: [alarm_name])
       @cloud_watch.modify!
     end
   end

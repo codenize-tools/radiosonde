@@ -53,7 +53,7 @@ class Radiosonde::DSL::Context::Alarm
 
     if value.kind_of?(Hash)
       value = value.map do |name, value|
-        {:name => name, :value => value}
+        Aws::CloudWatch::Types::Dimension.new(name: name, value: value)
       end
     end
 

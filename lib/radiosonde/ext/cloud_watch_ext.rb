@@ -1,4 +1,4 @@
-class AWS::CloudWatch
+class Aws::CloudWatch::Client
   def modify!
     @modified = true
   end
