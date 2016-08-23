@@ -4,15 +4,13 @@ class Radiosonde::Client
 
   def initialize(options = {})
     @options = options
-    @cloud_watch = AWS::CloudWatch.new
+    @cloud_watch = Aws::CloudWatch::Client.new
   end
 
   def export(opts = {})
     exported = nil
 
-    AWS.memoize do
-      exported = Radiosonde::Exporter.export(@cloud_watch, @options.merge(opts))
-    end
+    exported = Radiosonde::Exporter.export(@cloud_watch, @options.merge(opts))
 
     Radiosonde::DSL.convert(exported, @options.merge(opts))
   end
@@ -20,34 +18,30 @@ class Radiosonde::Client
   def metrics(opts = {})
     namespaces = {}
 
-    AWS.memoize do
-      ms = @cloud_watch.metrics
-
-      [:namespace, :metric_name].each do |name|
-        if (value = opts[name])
-          ms = ms.filter(name.to_s, value)
+    ms = @cloud_watch.list_metrics(namespace: opts[:namespace], metric_name: opts[:metric_name]).flat_map(&:metrics)
+    ms.sort_by {|m| [m.namespace, m.metric_name] }.each do |m|
+      if opts[:with_statistics]
+        namespaces[m.namespace] ||= {}
+        statistics_ops = {
+          namespace: opts[:namespace],
+          metric_name: opts[:metric_name],
+          period: 60,
+          dimensions: m.dimensions,
+        }
+        [:start_time, :end_time, :statistics].each do |name|
+          statistics_ops[name] = opts[name] if opts[name]
         end
-      end
-
-      ms.sort_by {|m| [m.namespace, m.metric_name] }.each do |m|
-        if opts[:with_statistics]
-          namespaces[m.namespace] ||= {}
-          statistics_ops = {}
-          [:start_time, :end_time, :statistics].each do |name|
-            statistics_ops[name] = opts[name] if opts[name]
-          end
-          statistics = m.statistics(statistics_ops)
-          namespaces[m.namespace][m.metric_name] = {
-            :label => statistics.label,
-            :datapoints => statistics.datapoints
-          }
-        elsif opts[:with_dimensions]
-          namespaces[m.namespace] ||= {}
-          namespaces[m.namespace][m.metric_name] = m.dimensions
-        else
-          namespaces[m.namespace] ||= []
-          namespaces[m.namespace] << m.metric_name
-        end
+        statistics = @cloud_watch.get_metric_statistics(statistics_ops)
+        namespaces[m.namespace][m.metric_name] = {
+          label: statistics.label,
+          datapoints: statistics.datapoints.map(&:to_h),
+        }
+      elsif opts[:with_dimensions]
+        namespaces[m.namespace] ||= {}
+        namespaces[m.namespace][m.metric_name] = m.dimensions.map(&:to_h)
+      else
+        namespaces[m.namespace] ||= []
+        namespaces[m.namespace] << m.metric_name
       end
     end
 
@@ -55,7 +49,7 @@ class Radiosonde::Client
   end
 
   def apply(file)
-    AWS.memoize { walk(file) }
+    walk(file)
   end
 
   private

@@ -5,7 +5,7 @@ class Radiosonde::Wrapper::CloudWatch
   end
 
   def alarms
-    Radiosonde::Wrapper::AlarmCollection.new(@cloud_watch, @cloud_watch.alarms, @options)
+    Radiosonde::Wrapper::AlarmCollection.new(@cloud_watch, @options)
   end
 
   def modified?
