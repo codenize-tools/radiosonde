@@ -97,7 +97,7 @@ template "basic" do
   actions_enabled true
   alarm_actions []
   ok_actions []
-  insufficient_data_actions [context.sns_topic]
+  insufficient_data_actions [context[:sns_topic]]
 end
 
 alarm "alarm1" do
