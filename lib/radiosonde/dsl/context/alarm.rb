@@ -123,4 +123,14 @@ class Radiosonde::DSL::Context::Alarm
     _expected_type(actions, Array)
     @result.insufficient_data_actions = [(actions || [])].flatten
   end
+
+  def treat_missing_data(value)
+    _call_once(:treat_missing_data)
+    _validate("Invalid value: #{value}") do
+      Radiosonde::DSL::TreatMissingData.valid?(value)
+    end
+
+    @result.treat_missing_data = Radiosonde::DSL::TreatMissingData.normalize(value)
+  end
+
 end

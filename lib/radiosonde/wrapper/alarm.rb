@@ -18,6 +18,7 @@ class Radiosonde::Wrapper::Alarm
     :ok_actions,
     :insufficient_data_actions,
     :actions_enabled,
+    :treat_missing_data
   ]
 
   ATTRIBUTES = [:alarm_name] + ATTRIBUTES_WITHOUT_NAME
