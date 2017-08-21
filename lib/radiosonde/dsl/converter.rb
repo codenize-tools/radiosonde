@@ -45,7 +45,7 @@ class Radiosonde::DSL::Converter
 
     if treat_missing_data = attrs[:treat_missing_data]
       treat_missing_data = Radiosonde::DSL::TreatMissingData.conv_to_alias(treat_missing_data).inspect
-      treat_missing_data = "treat_missing_data #{treat_missing_data}\n"
+      treat_missing_data = "treat_missing_data #{treat_missing_data}\n  "
     end
 
     <<-EOS
