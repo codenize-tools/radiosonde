@@ -7,7 +7,7 @@ require 'ostruct'
 require 'singleton'
 require 'pp'
 
-require 'aws-sdk-core'
+require 'aws-sdk-cloudwatch'
 require 'term/ansicolor'
 require 'diffy'
 require 'hashie'
