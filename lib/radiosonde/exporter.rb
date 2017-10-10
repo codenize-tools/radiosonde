@@ -44,6 +44,7 @@ class Radiosonde::Exporter
       :ok_actions => alarm.ok_actions,
       :insufficient_data_actions => alarm.insufficient_data_actions,
       :unit => alarm.unit,
+      :treat_missing_data => alarm.treat_missing_data
     }
 
     if @options[:with_status]

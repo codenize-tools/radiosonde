@@ -1,4 +1,5 @@
 require 'radiosonde/dsl/unit'
+require 'radiosonde/dsl/treat_missing_data'
 
 class Radiosonde::DSL::Converter
   class << self
@@ -42,6 +43,11 @@ class Radiosonde::DSL::Converter
       unit = "unit #{unit}\n"
     end
 
+    if treat_missing_data = attrs[:treat_missing_data]
+      treat_missing_data = Radiosonde::DSL::TreatMissingData.conv_to_alias(treat_missing_data).inspect
+      treat_missing_data = "treat_missing_data #{treat_missing_data}\n  "
+    end
+
     <<-EOS
 alarm #{name} do
   #{description
@@ -51,7 +57,8 @@ alarm #{name} do
   }period #{period}
   statistic #{statistic}
   threshold #{threshold}
-  evaluation_periods #{evaluation_periods}
+  #{treat_missing_data
+  }evaluation_periods #{evaluation_periods}
   #{unit
   }actions_enabled #{actions_enabled}
   alarm_actions #{alarm_actions}
