@@ -18,7 +18,7 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ['lib']
 
-  spec.add_dependency 'aws-sdk-core', '>= 2.1.0'
+  spec.add_dependency 'aws-sdk-cloudwatch'
   spec.add_dependency 'json'
   spec.add_dependency 'term-ansicolor'
   spec.add_dependency 'diffy'
