@@ -91,6 +91,11 @@ class Radiosonde::DSL::Context::Alarm
     @result.evaluation_periods = value.to_i
   end
 
+  def datapoints_to_alarm(value)
+    _call_once(:datapoints_to_alarm)
+    @result.datapoints_to_alarm = value.to_i
+  end
+
   def unit(value)
     _call_once(:unit)
     _validate("Invalid value: #{value}") do

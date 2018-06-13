@@ -12,6 +12,7 @@ class Radiosonde::Wrapper::Alarm
     :threshold,
     :comparison_operator,
     :evaluation_periods,
+    :datapoints_to_alarm,
     :actions_enabled,
     :unit,
     :alarm_actions,

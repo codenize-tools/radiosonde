@@ -39,6 +39,7 @@ class Radiosonde::Exporter
       :threshold => alarm.threshold,
       :comparison_operator => alarm.comparison_operator,
       :evaluation_periods => alarm.evaluation_periods,
+      :datapoints_to_alarm => alarm.datapoints_to_alarm,
       :actions_enabled => alarm.actions_enabled,
       :alarm_actions => alarm.alarm_actions,
       :ok_actions => alarm.ok_actions,
