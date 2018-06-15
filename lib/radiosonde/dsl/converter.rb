@@ -41,7 +41,7 @@ class Radiosonde::DSL::Converter
 
     if unit = attrs[:unit]
       unit = Radiosonde::DSL::Unit.conv_to_alias(unit).inspect
-      unit = "unit #{unit}\n"
+      unit = "unit #{unit}\n  "
     end
 
     if treat_missing_data = attrs[:treat_missing_data]
