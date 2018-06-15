@@ -40,6 +40,7 @@ Aws.config[:cloudwatch] = {
           evaluation_periods: 1,
           datapoints_to_alarm: 1,
           threshold: 5.0,
+          treat_missing_data: 'notBreaching',
           comparison_operator: 'LessThanOrEqualToThreshold'
         }
       ]
