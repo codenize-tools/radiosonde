@@ -33,6 +33,7 @@ class Radiosonde::DSL::Converter
     statistic = Radiosonde::DSL::Statistic.conv_to_alias(attrs[:statistic]).inspect
     threshold = format_threshold(attrs)
     evaluation_periods = attrs[:evaluation_periods].inspect
+    datapoints_to_alarm = attrs[:datapoints_to_alarm].inspect
     actions_enabled = attrs[:actions_enabled].inspect
     alarm_actions = attrs[:alarm_actions].inspect
     ok_actions = attrs[:ok_actions].inspect
@@ -40,7 +41,7 @@ class Radiosonde::DSL::Converter
 
     if unit = attrs[:unit]
       unit = Radiosonde::DSL::Unit.conv_to_alias(unit).inspect
-      unit = "unit #{unit}\n"
+      unit = "unit #{unit}\n  "
     end
 
     if treat_missing_data = attrs[:treat_missing_data]
@@ -59,6 +60,7 @@ alarm #{name} do
   threshold #{threshold}
   #{treat_missing_data
   }evaluation_periods #{evaluation_periods}
+  datapoints_to_alarm #{datapoints_to_alarm}
   #{unit
   }actions_enabled #{actions_enabled}
   alarm_actions #{alarm_actions}
