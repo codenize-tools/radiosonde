@@ -18,7 +18,6 @@ class Radiosonde::Wrapper::Alarm
     :alarm_actions,
     :ok_actions,
     :insufficient_data_actions,
-    :actions_enabled,
     :treat_missing_data
   ]
 
